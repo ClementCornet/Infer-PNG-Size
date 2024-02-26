@@ -2,3 +2,4 @@ streamlit
 plotly
 pickle
 numpy
+tqdm
