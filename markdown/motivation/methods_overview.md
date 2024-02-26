@@ -1,0 +1,3 @@
+## Methods Overview
+
+Our objective is to estimate after-compression size of PNG images. To do so, we start by using Sparsity measurements, as described in _Comparing measures of sparsity N Hurley, S Rickard - IEEE Transactions on Information Theory, 2009_. Then, we add our own measurements and tools to improve those results. During this work, we build a few regression models and discuss thir performances.
