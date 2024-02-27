@@ -3,18 +3,25 @@ import os.path
 import tqdm
 
 
-from .images import get_images, get_paeth_images
-from .measures import get_png_size, gini, image_hopkins, shannon_entropy, modified_shannon_entropy, l0_norm,\
-        l1_norm, l2_l1_ratio, sparse_log, kurtosis_4, gaussian_entropy, hoyer, sparse_tanh, l0_epsilon, lp_neg, lp_norm
+try:
+    from .images import get_images, get_paeth_images
+    from .measures import get_png_size, gini, image_hopkins, shannon_entropy, modified_shannon_entropy, l0_norm,\
+            l1_norm, l2_l1_ratio, sparse_log, kurtosis_4, gaussian_entropy, hoyer, sparse_tanh,\
+            l0_epsilon, lp_neg, lp_norm, card_image
+except:
+    from images import get_images, get_paeth_images
+    from measures import get_png_size, gini, image_hopkins, shannon_entropy, modified_shannon_entropy, l0_norm,\
+            l1_norm, l2_l1_ratio, sparse_log, kurtosis_4, gaussian_entropy, hoyer, sparse_tanh,\
+            l0_epsilon, lp_neg, lp_norm, card_image, card_image_mono
 
 
 def measures_table(
         subset='train',
-        epsilon_l0eps=0.1,
+        epsilon_l0eps=0.005,
         p_lp=2,
-        a_tanh=2,
+        a_tanh=0.5,
         b_tanh=2,
-        p_lp_neg=-1
+        p_lp_neg=0.5
     ):
     """
     Get every measure used in this work, on a subset of CIFAR-100
@@ -89,8 +96,23 @@ def measures_table(
         print('--- Gini ---')
         df['$Gini$'] = [gini(im) for im in tqdm.tqdm(im_paeth)]
 
-    df.to_csv(savepath, index=None)
+    if '$Gini_{raw}$' not in df.columns:
+        print('--- Raw Gini ---')
+        df['$Gini_{raw}$'] = [gini(im) for im in tqdm.tqdm(im_raw)]
 
+    if '$Card$' not in df.columns:
+        print('--- Card ---')
+        df['$Card$'] = [card_image(im) for im in tqdm.tqdm(im_paeth)]
+
+    if '$Card_{raw}$' not in df.columns:
+        print('--- Card ---')
+        df['$Card_{raw}$'] = [card_image(im) for im in tqdm.tqdm(im_raw)]  
+
+    if '$Card_{raw}_mono$' not in df.columns:
+        print('--- Card ---')
+        df['$Card_{raw}_mono$'] = [card_image_mono(im) for im in tqdm.tqdm(im_raw)]    
+
+    #df.to_csv(savepath, index=None)
 
     # Parametric Measures
 
@@ -100,10 +122,17 @@ def measures_table(
     print('--- L0 Epsilon ---')
     df[f'$\ell_{{{epsilon_l0eps}}}^0$'] = [l0_epsilon(im, epsilon_l0eps) for im in tqdm.tqdm(im_paeth)]
 
-    print('--- LP Norm ---')
+    print('--- LP Norm ---', f'$\ell^{{{p_lp}}}$')
     df[f'$\ell^{{{p_lp}}}$'] = [lp_norm(im, p_lp) for im in tqdm.tqdm(im_paeth)]
 
     print('--- LP with Negative P ---')
     df[f'$-\ell^{{{-p_lp_neg}}}_-$'] = [lp_neg(im, p_lp_neg) for im in tqdm.tqdm(im_paeth)]
 
+    df.to_csv(savepath, index=None)
+
     return df
+
+
+if __name__ == '__main__':
+    measures_table(subset='train')
+    measures_table(subset='test')

@@ -222,4 +222,19 @@ def lp_neg(im, p):
     """
     Compute $\ell^p_-$ with $p<0$
     """
-    return (im**p).clip(min=1e-100).mean() * len(im.flatten())
+    return (1/(im**p).clip(min=1e-50)).mean() * len(im.flatten())
+    #return (1/(im**p)).clip(min=1e-100).mean() * len(im.flatten())
+
+def card_image(im):
+    """
+    Returns average cardinality of RGB channels of an image
+    """
+    return (pd.Series(im[:,:,0].flatten()).nunique()
+        + pd.Series(im[:,:,1].flatten()).nunique()
+        + pd.Series(im[:,:,2].flatten()).nunique()) / 3
+
+def card_image_mono(im):
+    """
+    Returns average cardinality an image's pixel values
+    """
+    return pd.Series(im.flatten()).nunique()
