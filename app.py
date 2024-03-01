@@ -5,7 +5,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Local Imports
-from streamlit_app import motivation, sparsity_measures, first_predictor, card_hopkins, second_predictor
+from streamlit_app import motivation, sparsity_measures, first_predictor, card_hopkins, second_predictor,\
+                            image_processing, third_predictor, final_png
 
 with st.sidebar:
     st.title('Sparse Models Project #4')
@@ -15,7 +16,10 @@ with st.sidebar:
         'Sparsity Measures',
         'First Predictor',
         'New Measures',
-        'Second Predictor'
+        'Second Predictor',
+        'Image Processing Techniques',
+        'Third Predictor',
+        'Final PNG'
     ])
 
 if choice == 'Motivation':
@@ -32,3 +36,12 @@ if choice == 'New Measures':
 
 if choice == 'Second Predictor':
     second_predictor.page()
+
+if choice == 'Image Processing Techniques':
+    image_processing.page()
+
+if choice == 'Third Predictor':
+    third_predictor.page()
+
+if choice == 'Final PNG':
+    final_png.page()

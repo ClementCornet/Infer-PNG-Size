@@ -35,7 +35,23 @@ def page():
         df2 = df.drop('$Hopkins$', axis=1)\
                     .drop('$Card$', axis=1)\
                     .drop('$Card_{raw}$', axis=1)\
-                    .drop('$Card_{raw}_mono$', axis=1)
+                    .drop('$Card_{raw}^{mono}$', axis=1)\
+                    .drop('$GO-\ell^0$', axis=1)\
+                    .drop('$GO-\ell^1$', axis=1)\
+                    .drop('$GO-\ell^2$', axis=1)\
+                    .drop('$GO-\ell^H$', axis=1)\
+                    .drop('$DoG-\ell^0$', axis=1)\
+                    .drop('$DoG-\ell^1$', axis=1)\
+                    .drop('$DoG-\ell^2$', axis=1)\
+                    .drop('$DoG-\ell^H$', axis=1)\
+                    .drop('$GO-\ell^0_{raw}$', axis=1)\
+                    .drop('$GO-\ell^1_{raw}$', axis=1)\
+                    .drop('$GO-\ell^2_{raw}$', axis=1)\
+                    .drop('$GO-\ell^H_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^0_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^1_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^2_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^H_{raw}$', axis=1)
         cor = df2.corr().abs()
         fig = px.imshow(cor.fillna(0)
                         .sort_values('PNG Size', ascending=False, axis=0)

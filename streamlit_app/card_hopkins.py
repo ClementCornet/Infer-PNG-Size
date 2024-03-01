@@ -18,7 +18,22 @@ def page():
             st.markdown(open('markdown/measures/hopkins_adaptation.md','r').read())
     with cor_tab:
         st.markdown('Then, correlations heatmap, including $Card$ and $Hopkins$ :')
-        df = pd.read_csv('./precomputed/train.csv')
+        df = pd.read_csv('./precomputed/train.csv').drop('$GO-\ell^0$', axis=1)\
+                    .drop('$GO-\ell^1$', axis=1)\
+                    .drop('$GO-\ell^2$', axis=1)\
+                    .drop('$GO-\ell^H$', axis=1)\
+                    .drop('$DoG-\ell^0$', axis=1)\
+                    .drop('$DoG-\ell^1$', axis=1)\
+                    .drop('$DoG-\ell^2$', axis=1)\
+                    .drop('$DoG-\ell^H$', axis=1)\
+                    .drop('$GO-\ell^0_{raw}$', axis=1)\
+                    .drop('$GO-\ell^1_{raw}$', axis=1)\
+                    .drop('$GO-\ell^2_{raw}$', axis=1)\
+                    .drop('$GO-\ell^H_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^0_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^1_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^2_{raw}$', axis=1)\
+                    .drop('$DoG-\ell^H_{raw}$', axis=1)
         cor = df.corr().abs()
         fig = px.imshow(cor.fillna(0)
                         .sort_values('PNG Size', ascending=False, axis=0)

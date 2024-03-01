@@ -8,6 +8,7 @@ import matplotlib.image
 import uuid
 from sklearn.preprocessing import StandardScaler
 import scipy as sp
+import scipy.ndimage as ndi
 
 def get_png_size(img):
     """
@@ -238,3 +239,83 @@ def card_image_mono(im):
     Returns average cardinality an image's pixel values
     """
     return pd.Series(im.flatten()).nunique()
+
+def dog_l0(im):
+    """
+    L0 Norm of difference of gaussian
+    """
+    return l0_norm(
+        ndi.gaussian_filter(im, .5) - ndi.gaussian_filter(im, 1)
+    )
+
+def dog_l1(im):
+    """
+    L1 Norm of difference of gaussian
+    """
+    return l1_norm(
+        ndi.gaussian_filter(im, .5) - ndi.gaussian_filter(im, 1)
+    )
+
+def dog_l2(im):
+    """
+    L2 Norm of difference of gaussian
+    """
+    return lp_norm(
+        ndi.gaussian_filter(im, .5) - ndi.gaussian_filter(im, 1), 2
+    )
+
+def dog_hs(im):
+    """
+    Shannon Entropy of difference of gaussian
+    """
+    return shannon_entropy(
+        ndi.gaussian_filter(im, .5) - ndi.gaussian_filter(im, 1)
+    )
+
+def greyopening_l0(im):
+    """
+    L0 Norm of Gray Opening difference
+    """
+    TOT = 0
+    for chan in range(3):
+        im0 = im[:,:,chan]
+        im0_grey_opening = ndi.grey_opening(im0, size=(2,2))
+        diff = np.abs(im0 - im0_grey_opening)
+        TOT += l0_norm(diff)
+    return TOT
+
+def greyopening_l1(im):
+    """
+    L1 Norm of Gray Opening difference
+    """
+    TOT = 0
+    for chan in range(3):
+        im0 = im[:,:,chan]
+        im0_grey_opening = ndi.grey_opening(im0, size=(2,2))
+        diff = np.abs(im0 - im0_grey_opening)
+        TOT += l1_norm(diff)
+    return TOT
+
+def greyopening_l2(im):
+    """
+    L2 Norm of Gray Opening difference
+    """
+    TOT = 0
+    for chan in range(3):
+        im0 = im[:,:,chan]
+        im0_grey_opening = ndi.grey_opening(im0, size=(2,2))
+        diff = np.abs(im0 - im0_grey_opening)
+        TOT += lp_norm(diff, 2)
+    return TOT
+
+def greyopening_hs(im):
+    """
+    Shannon Entropy of Gray Opening difference
+    """
+    TOT = 0
+    for chan in range(3):
+        im0 = im[:,:,chan]
+        im0_grey_opening = ndi.grey_opening(im0, size=(2,2))
+        diff = np.abs(im0 - im0_grey_opening)
+        TOT += shannon_entropy(diff)
+    return TOT

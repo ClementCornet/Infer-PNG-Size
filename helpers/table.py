@@ -7,12 +7,14 @@ try:
     from .images import get_images, get_paeth_images
     from .measures import get_png_size, gini, image_hopkins, shannon_entropy, modified_shannon_entropy, l0_norm,\
             l1_norm, l2_l1_ratio, sparse_log, kurtosis_4, gaussian_entropy, hoyer, sparse_tanh,\
-            l0_epsilon, lp_neg, lp_norm, card_image
+            l0_epsilon, lp_neg, lp_norm, card_image, card_image_mono, dog_l0, greyopening_l1, dog_l1, dog_l2,\
+            dog_hs, greyopening_l0, greyopening_l2, greyopening_hs
 except:
     from images import get_images, get_paeth_images
     from measures import get_png_size, gini, image_hopkins, shannon_entropy, modified_shannon_entropy, l0_norm,\
             l1_norm, l2_l1_ratio, sparse_log, kurtosis_4, gaussian_entropy, hoyer, sparse_tanh,\
-            l0_epsilon, lp_neg, lp_norm, card_image, card_image_mono
+            l0_epsilon, lp_neg, lp_norm, card_image, card_image_mono, dog_l0, greyopening_l1, dog_l1, dog_l2,\
+            dog_hs, greyopening_l0, greyopening_l2, greyopening_hs
 
 
 def measures_table(
@@ -43,8 +45,8 @@ def measures_table(
 
     df = pd.DataFrame()
     savepath = f"./precomputed/{subset}.csv"
-    if os.path.isfile(savepath):
-        df = pd.read_csv(savepath)
+    #if os.path.isfile(savepath):
+    #    df = pd.read_csv(savepath)
 
     # Non Parametric Measures
 
@@ -108,9 +110,73 @@ def measures_table(
         print('--- Card ---')
         df['$Card_{raw}$'] = [card_image(im) for im in tqdm.tqdm(im_raw)]  
 
-    if '$Card_{raw}_mono$' not in df.columns:
+    if '$Card_{raw}^{mono}$' not in df.columns:
         print('--- Card ---')
-        df['$Card_{raw}_mono$'] = [card_image_mono(im) for im in tqdm.tqdm(im_raw)]    
+        df['$Card_{raw}^{mono}$'] = [card_image_mono(im) for im in tqdm.tqdm(im_raw)]   
+
+    if '$DoG-\ell^0_{raw}$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^0_{raw}$'] = [dog_l0(im) for im in tqdm.tqdm(im_raw)]
+    
+    if '$DoG-\ell^1_{raw}$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^1_{raw}$'] = [dog_l1(im) for im in tqdm.tqdm(im_raw)]
+    
+    if '$DoG-\ell^2_{raw}$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^2_{raw}$'] = [dog_l2(im) for im in tqdm.tqdm(im_raw)]
+    
+    if '$DoG-\ell^H_{raw}$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^H_{raw}$'] = [dog_hs(im) for im in tqdm.tqdm(im_raw)]
+
+    if '$GO-\ell^0_{raw}$' not in df.columns:
+        print('--- GO raw ---')
+        df['$GO-\ell^0_{raw}$'] = [greyopening_l0(im) for im in tqdm.tqdm(im_raw)]  
+    
+    if '$GO-\ell^1_{raw}$' not in df.columns:
+        print('--- GO raw ---')
+        df['$GO-\ell^1_{raw}$'] = [greyopening_l1(im) for im in tqdm.tqdm(im_raw)]  
+    
+    if '$GO-\ell^2_{raw}$' not in df.columns:
+        print('--- GO raw ---')
+        df['$GO-\ell^2_{raw}$'] = [greyopening_l2(im) for im in tqdm.tqdm(im_raw)]
+    
+    if '$GO-\ell^H_{raw}$' not in df.columns:
+        print('--- GO raw ---')
+        df['$GO-\ell^H_{raw}$'] = [greyopening_hs(im) for im in tqdm.tqdm(im_raw)]  
+
+    if '$DoG-\ell^0$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^0$'] = [dog_l0(im) for im in tqdm.tqdm(im_paeth)]
+
+    if '$DoG-\ell^1$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^1$'] = [dog_l1(im) for im in tqdm.tqdm(im_paeth)]
+
+    if '$DoG-\ell^2$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^2$'] = [dog_l2(im) for im in tqdm.tqdm(im_paeth)]
+    
+    if '$DoG-\ell^H$' not in df.columns:
+        print('--- DoG raw ---')
+        df['$DoG-\ell^H$'] = [dog_hs(im) for im in tqdm.tqdm(im_paeth)]
+
+    if '$GO-\ell^0$' not in df.columns:
+        print('--- Go raw ---')
+        df['$GO-\ell^0$'] = [greyopening_l0(im) for im in tqdm.tqdm(im_paeth)]  
+
+    if '$GO-\ell^1$' not in df.columns:
+        print('--- Go raw ---')
+        df['$GO-\ell^1$'] = [greyopening_l1(im) for im in tqdm.tqdm(im_paeth)]
+    
+    if '$GO-\ell^2$' not in df.columns:
+        print('--- Go raw ---')
+        df['$GO-\ell^2$'] = [greyopening_l2(im) for im in tqdm.tqdm(im_paeth)]  
+
+    if '$GO-\ell^H$' not in df.columns:
+        print('--- Go raw ---')
+        df['$GO-\ell^H$'] = [greyopening_hs(im) for im in tqdm.tqdm(im_paeth)]  
 
     #df.to_csv(savepath, index=None)
 
